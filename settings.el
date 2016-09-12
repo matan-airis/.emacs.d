@@ -74,7 +74,8 @@
 
 ;; Set C-x c to quit, not C-x C-c
 (global-set-key [(control x) (control c)] (defun dont-kill-emacs() (interactive) (message "Use C-x c to leave emacs")))
-(global-set-key [(control x) c] 'save-buffers-kill-emacs)
+(global-set-key [(control x) c] 'save-buffers-kill-terminal)
+(global-set-key "\C-xc" 'save-buffers-kill-terminal)
 
 ;; Colors displayed by diff mode.
 (defun update-diff-colors ()
@@ -99,5 +100,11 @@
 
 ;; Set the C-mode's tab to 4 spaces.
 (setq c-basic-offset 4)
+
+;; Show the current function in the mode line.
+(which-function-mode 1)
+
+;; When in text mode, proper line size should be 80.
+(setq-default fill-column 80)
 
 (provide 'settings)

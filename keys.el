@@ -5,8 +5,6 @@
 (require 'user-macros)
 (require 'custom-functions)
 
-(global-set-key "\C-xc" 'save-buffers-kill-emacs)
-
 (global-set-key [pause] 'kill-this-buffer)
 (global-set-key [(control tab)] 'other-window)
 (global-set-key [f6] 'switch-to-other-buffer)
@@ -47,6 +45,15 @@
 (global-set-key [(meta shift right)] 'forward-sexp-mark)
 (global-set-key [(meta backspace)] 'backward-kill-word)    ;; Don't deleting the entire sexp; too harmful...
 
+;; More convenient mark bindings (we override C-SPC later on)
+(global-set-key (kbd "C-c m") 'set-mark-command)
+(global-set-key (kbd "C-c C-m") 'set-mark-command)
+;; C-x C-x will exchange point with the mark, here we also highlight it.
+(global-set-key (kbd "C-S-x C-S-x") 'exchange-point-and-mark)
+(global-set-key (kbd "C-x <up>") 'pop-to-mark-command)
+(global-set-key (kbd "C-x C-<up>") 'pop-to-mark-command)
+
+
 (global-set-key [(control meta left)] 'next-buffer)
 (global-set-key [(control meta right)] 'previous-buffer)
 (global-set-key [(f1)] 'man)
@@ -55,11 +62,6 @@
 
 (global-set-key "\M-g" 'goto-line)
 (global-set-key [(control meta b)] 'toggle-truncate-lines)
-
-(require 'python-mode)
-
-;; Undo the idiotic Python C-backspace, this will be set back to default
-(define-key python-mode-map [(control backspace)] nil)
 
 ;; Smarter shell completion
 (define-key shell-mode-map [(control up)] 'comint-previous-matching-input-from-input)
@@ -83,6 +85,33 @@
 (fset 'python-breakpoint
    [up end return ?i ?m ?p ?o ?r ?t ?  ?p ?d ?b ?\; ?  ?p ?d ?b ?. ?s ?e ?t ?_ ?t ?r ?a ?c ?e ?\( ?\) down])
 
-(define-key python-mode-map (kbd "C-c C-b") 'python-breakpoint)
+(require 'python-mode)
+
+;; Undo the idiotic Python C-backspace, this will be set back to default
+(define-key py-mode-map [(control backspace)] nil)
+(define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
+
+;; C-Scope keys
+(define-key c-mode-base-map (kbd "C-c g") 'cscope-find-global-definition)
+(define-key c-mode-base-map (kbd "C-c x") 'cscope-find-functions-calling-this-function)
+(define-key c-mode-base-map (kbd "C-c h") 'c-insert-header-guard)
+
+(defun scroll-up-one-line()
+  (interactive)
+  (scroll-up 1))
+
+(defun scroll-down-one-line()
+  (interactive)
+  (scroll-down 1))
+
+;; XXX overriding default emacs binding?
+(global-set-key [(control meta up)] 'scroll-down-one-line)
+(global-set-key [(control meta down)] 'scroll-up-one-line)
+
+(global-set-key (kbd "C-c C-q") 'prettify)
+
+; Camelize
+(global-set-key (kbd "C-C <up>") 'camelize-var)
+
 
 (provide 'keys)

@@ -14,14 +14,15 @@
 	(crs-add-to-load-path (cdr path-string)))))
 
 (add-to-load-path (expand-file-name "~/.emacs.d"))
+(add-to-load-path (expand-file-name "~/.emacs.d/dockerfile-mode"))
 (add-to-load-path (expand-file-name "/usr/share/emacs/site-lisp/python-mode"))
 
 (setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
 
 (require 'settings)
 (require 'marks)
-(defvaralias 'python-mode-map 'py-mode-map)
 (require 'python-mode)
+;;(python-mode-v5-behavior-p-on)
 (require 'ido)
 (require 'pc-select)
 (require 'quick-yes)
@@ -29,6 +30,19 @@
 (require 'lua-mode)
 (require 'git)
 (require 'internet-search)
+(require 'xcscope)
+(require 'camelize)
+
+;; Mercurial mode files. We have them in our repository, but:
+;;   - mercurial.el is distributed with Mercurial.
+;;   - ahg.el is from https://bitbucket.org/agriggio/ahg/
+(require 'mercurial)
+(require 'ahg)
+
+;; Java module - JDEE. This is a bit old, but works fine.
+(if (file-exists-p "~/.emacs.d/jdee/lisp")
+    (progn (add-to-list 'load-path "~/.emacs.d/jdee/lisp")
+           (load "jde")))
 
 (ido-mode t)
 (font-lock-mode)
@@ -77,6 +91,7 @@
 ;; Turn off bell alarms
 (setq ring-bell-function 'ignore)
 
+<<<<<<< HEAD
 ;; Turn off welcome screen
 (setq inhibit-startup-message t)
 
@@ -117,3 +132,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(tool-bar-mode -1)
+
+(require 'pymacs)
+
+;; Load keys the last, in order to override bad key bindings
+(require 'keys)
+
+(require 'dockerfile-mode)
+
+(defvaralias 'last-command-char 'last-command-event)
+
+
