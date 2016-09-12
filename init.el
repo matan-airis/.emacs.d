@@ -13,7 +13,7 @@
     (if (cdr path-string)
 	(crs-add-to-load-path (cdr path-string)))))
 
-(add-to-load-path (expand-file-name "~/.emacs.d"))
+(add-to-load-path (expand-file-name "~/.emacs.d/lisp"))
 (add-to-load-path (expand-file-name "~/.emacs.d/dockerfile-mode"))
 (add-to-load-path (expand-file-name "/usr/share/emacs/site-lisp/python-mode"))
 
@@ -91,7 +91,6 @@
 ;; Turn off bell alarms
 (setq ring-bell-function 'ignore)
 
-<<<<<<< HEAD
 ;; Turn off welcome screen
 (setq inhibit-startup-message t)
 
