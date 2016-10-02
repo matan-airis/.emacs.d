@@ -109,7 +109,7 @@
 
 ;; add marmalade elpa repo
 (require 'package)
-(add-to-list 'package-archives 
+(add-to-list 'package-archives
     '("marmalade" .
       "http://marmalade-repo.org/packages/"))
 (package-initialize)
@@ -140,6 +140,9 @@
 
 (require 'dockerfile-mode)
 
+;; Mark columns that go past 80
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+(global-whitespace-mode t)
+
 (defvaralias 'last-command-char 'last-command-event)
-
-
