@@ -15,14 +15,12 @@
 
 (add-to-load-path (expand-file-name "~/.emacs.d/lisp"))
 (add-to-load-path (expand-file-name "~/.emacs.d/dockerfile-mode"))
-(add-to-load-path (expand-file-name "/usr/share/emacs/site-lisp/python-mode"))
 
 (setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
 
 (require 'settings)
 (require 'marks)
 (require 'python-mode)
-;;(python-mode-v5-behavior-p-on)
 (require 'ido)
 (require 'pc-select)
 (require 'quick-yes)
@@ -106,6 +104,7 @@
 
 ;; disable tool bar
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; add marmalade elpa repo
 (require 'package)
@@ -132,8 +131,6 @@
  ;; If there is more than one, they won't work right.
  )
 (tool-bar-mode -1)
-
-(require 'pymacs)
 
 ;; Load keys the last, in order to override bad key bindings
 (require 'keys)
