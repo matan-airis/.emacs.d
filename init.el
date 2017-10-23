@@ -20,15 +20,14 @@
 
 (require 'settings)
 (require 'marks)
-(require 'python-mode)
 (require 'ido)
 (require 'pc-select)
 (require 'quick-yes)
 (require 'newshell)
 (require 'lua-mode)
-(require 'git)
+; (require 'git)
 (require 'internet-search)
-(require 'xcscope)
+; (require 'xcscope)
 (require 'camelize)
 
 ;; Mercurial mode files. We have them in our repository, but:

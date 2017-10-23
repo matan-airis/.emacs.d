@@ -85,12 +85,6 @@
 (fset 'python-breakpoint
    [up end return ?i ?m ?p ?o ?r ?t ?  ?p ?d ?b ?\; ?  ?p ?d ?b ?. ?s ?e ?t ?_ ?t ?r ?a ?c ?e ?\( ?\) down])
 
-(require 'python-mode)
-
-;; Undo the idiotic Python C-backspace, this will be set back to default
-(define-key py-mode-map [(control backspace)] nil)
-(define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
-
 ;; C-Scope keys
 (define-key c-mode-base-map (kbd "C-c g") 'cscope-find-global-definition)
 (define-key c-mode-base-map (kbd "C-c x") 'cscope-find-functions-calling-this-function)
