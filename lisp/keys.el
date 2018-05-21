@@ -113,4 +113,7 @@
 ; Camelize
 (global-set-key (kbd "C-C <up>") 'camelize-var)
 
+; C-Enter goes to file
+(global-set-key (kbd "C-<return>") 'find-file-at-point)
+
 (provide 'keys)
