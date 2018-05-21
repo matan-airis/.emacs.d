@@ -63,10 +63,6 @@
 (global-set-key "\M-g" 'goto-line)
 (global-set-key [(control meta b)] 'toggle-truncate-lines)
 
-;; Smarter shell completion
-(define-key shell-mode-map [(control up)] 'comint-previous-matching-input-from-input)
-(define-key shell-mode-map [(control down)] 'comint-next-matching-input-from-input)
-
 (global-set-key "\M-\\" 'shell-command-on-region-inplace)
 
 (global-set-key (kbd "C-c s") 'search-in-internet)
@@ -78,23 +74,27 @@
 (global-set-key (kbd "M-#") 'uncomment-region) ;; This is actually M-S-3
 
 ;; C-Mode - When pressing on Enter, the next line should be indented. Also, allow to make a newline without indendation.
-(require 'cc-mode)
-(define-key c-mode-base-map (kbd "RET") 'newline-and-indent) 
-(define-key c-mode-base-map [(shift return)] 'newline)
+
+(eval-after-load "cc-mode"
+  '(progn
+     (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+     (define-key c-mode-base-map [(shift return)] 'newline)
+     ;; C-Scope keys
+     (define-key c-mode-base-map (kbd "C-c g") 'cscope-find-global-definition)
+     (define-key c-mode-base-map (kbd "C-c x") 'cscope-find-functions-calling-this-function)
+     (define-key c-mode-base-map (kbd "C-c h") 'c-insert-header-guard)
+     ))
 
 (fset 'python-breakpoint
    [up end return ?i ?m ?p ?o ?r ?t ?  ?p ?d ?b ?\; ?  ?p ?d ?b ?. ?s ?e ?t ?_ ?t ?r ?a ?c ?e ?\( ?\) down])
 
-(require 'python-mode)
-
 ;; Undo the idiotic Python C-backspace, this will be set back to default
-(define-key py-mode-map [(control backspace)] nil)
-(define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
+(eval-after-load "python-mode"
+  '(progn
+     (define-key py-mode-map [(control backspace)] nil)
+     (define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
+     ))
 
-;; C-Scope keys
-(define-key c-mode-base-map (kbd "C-c g") 'cscope-find-global-definition)
-(define-key c-mode-base-map (kbd "C-c x") 'cscope-find-functions-calling-this-function)
-(define-key c-mode-base-map (kbd "C-c h") 'c-insert-header-guard)
 
 (defun scroll-up-one-line()
   (interactive)
@@ -112,6 +112,5 @@
 
 ; Camelize
 (global-set-key (kbd "C-C <up>") 'camelize-var)
-
 
 (provide 'keys)
