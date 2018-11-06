@@ -70,20 +70,32 @@
 ;; When in text mode, proper line size should be 80.
 (setq-default fill-column 80)
 
-(defcustom LaTeX-indent-level-item-continuation 4
-  "*Indentation of continuation lines for items in itemize-like
-environments."
-  :group 'LaTeX-indentation
-  :type 'integer)
-
+;; Indent enumerate, itemize properly.
 (eval-after-load "latex"
-  '(setq LaTeX-indent-environment-list
-         (nconc '(("itemize" LaTeX-indent-item)
-                  ("enumerate" LaTeX-indent-item)
-                  ("description" LaTeX-indent-item))
-                LaTeX-indent-environment-list)))
+  '(add-to-list 'LaTeX-indent-environment-list
+                '("itemize" LaTeX-indent-item)))
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-indent-environment-list
+                '("enumerate" LaTeX-indent-item)))
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-indent-environment-list
+                '("description" LaTeX-indent-item)))
 
 (setq LaTeX-indent-level 2)
 (setq LaTeX-indent-level-item-continuation 8)
+
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-verbatim-environments "thapl"))
+
+;; UTF-8 forever
+(prefer-coding-system 'utf-8)
+
+;; Python
+(elpy-enable)
+(setq elpy-rpc-python-command "python3")
+
+(eval-after-load "elpy"
+  '(company-quickhelp-mode)
+  )
 
 (provide 'settings)

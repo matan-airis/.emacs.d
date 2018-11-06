@@ -7,11 +7,11 @@
   (message (format "Passed %S..." path-string))
   (if (stringp path-string)
       (when (file-exists-p path-string)
-	(message (format "Adding %S to load-path..." path-string))
-	(add-to-list 'load-path (expand-file-name path-string)))
+        (message (format "Adding %S to load-path..." path-string))
+        (add-to-list 'load-path (expand-file-name path-string)))
     (crs-add-to-load-path (car path-string))
     (if (cdr path-string)
-	(crs-add-to-load-path (cdr path-string)))))
+        (crs-add-to-load-path (cdr path-string)))))
 
 (add-to-load-path (expand-file-name "~/.emacs.d/lisp"))
 
@@ -20,7 +20,7 @@
 (require 'settings)
 (require 'quick-yes)
 ; (require 'internet-search)
- (require 'camelize)
+(require 'package)
 
 ;; Mercurial mode files. We have them in our repository, but:
 ;;   - mercurial.el is distributed with Mercurial.
@@ -61,7 +61,7 @@
  '(main-line-separator-style 'chamfer)
  '(nyan-wavy-trail t)
  '(package-selected-packages
-   '(zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
+   '(string-inflection company-auctex company-quickhelp company-math elpy opencl-mode auto-virtualenvwrapper ein langtool latex-pretty-symbols latex-preview-pane prolog py-autopep8 py-isort py-smart-operator python-docstring python-pep8 virtualenvwrapper sml-mode zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(standard-indent 4)
