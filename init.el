@@ -28,7 +28,7 @@
 ; (require 'mercurial)
 ; (require 'ahg)
 
-(ido-mode t)
+(ivy-mode t)
 (font-lock-mode)
 
 (custom-set-variables
@@ -61,7 +61,7 @@
  '(main-line-separator-style 'chamfer)
  '(nyan-wavy-trail t)
  '(package-selected-packages
-   '(string-inflection company-auctex company-quickhelp company-math elpy opencl-mode auto-virtualenvwrapper ein langtool latex-pretty-symbols latex-preview-pane prolog py-autopep8 py-isort py-smart-operator python-docstring python-pep8 virtualenvwrapper sml-mode zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
+   '(forge magit eldoro ereader ivy-bibtex timesheet twittering-mode lua-mode string-inflection company-auctex company-quickhelp company-math elpy opencl-mode auto-virtualenvwrapper ein langtool latex-pretty-symbols latex-preview-pane prolog py-autopep8 py-isort py-smart-operator python-docstring python-pep8 virtualenvwrapper sml-mode zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(standard-indent 4)
@@ -86,7 +86,7 @@
 ;; Set up ELPA repos
 (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
 ;; load theme
 (load-theme 'zenburn t)
@@ -112,6 +112,9 @@
 
 ;; Kill fucking annoying eldoc mode which jumps to definition when I don't want it
 (global-eldoc-mode -1)
+
+;; active latex-pretty-symbols
+(require 'latex-pretty-symbols)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
