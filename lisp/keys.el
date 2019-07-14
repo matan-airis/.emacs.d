@@ -81,12 +81,12 @@
    [up end return ?i ?m ?p ?o ?r ?t ?  ?p ?d ?b ?\; ?  ?p ?d ?b ?. ?s ?e ?t ?_ ?t ?r ?a ?c ?e ?\( ?\) down])
 
 ;; Undo the idiotic Python C-backspace, this will be set back to default
-(eval-after-load "python-mode"
-  '(progn
-     (define-key py-mode-map [(control backspace)] nil)
-     (define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
-     (define-key py-mode-map (kbd "C-c C-u") 'string-inflection-python-style-cycle)
-     ))
+;(eval-after-load "python-mode"
+;  '(progn
+;     (define-key py-mode-map [(control backspace)] nil)
+;     (define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
+;     (define-key py-mode-map (kbd "C-c C-u") 'string-inflection-python-style-cycle)
+;     ))
 
 
 (global-set-key (kbd "C-c C-q") 'prettify)
