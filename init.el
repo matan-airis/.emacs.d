@@ -61,7 +61,7 @@
  '(main-line-separator-style 'chamfer)
  '(nyan-wavy-trail t)
  '(package-selected-packages
-   '(zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
+   '(latex-pretty-symbols auctex zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(standard-indent 4)
@@ -84,7 +84,7 @@
 ")
 
 ;; Set up ELPA repos
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+(require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
