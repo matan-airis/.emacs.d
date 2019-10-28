@@ -2,16 +2,21 @@
 ;; Initial Emacs load file
 ;;
 
+;; Set up ELPA repos
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+
 ;; Add the given path to the load-path variable.
 (defun add-to-load-path (path-string)
   (message (format "Passed %S..." path-string))
   (if (stringp path-string)
       (when (file-exists-p path-string)
-	(message (format "Adding %S to load-path..." path-string))
-	(add-to-list 'load-path (expand-file-name path-string)))
+        (message (format "Adding %S to load-path..." path-string))
+        (add-to-list 'load-path (expand-file-name path-string)))
     (crs-add-to-load-path (car path-string))
     (if (cdr path-string)
-	(crs-add-to-load-path (cdr path-string)))))
+        (crs-add-to-load-path (cdr path-string)))))
 
 (add-to-load-path (expand-file-name "~/.emacs.d/lisp"))
 
@@ -20,7 +25,6 @@
 (require 'settings)
 (require 'quick-yes)
 ; (require 'internet-search)
- (require 'camelize)
 
 ;; Mercurial mode files. We have them in our repository, but:
 ;;   - mercurial.el is distributed with Mercurial.
@@ -28,7 +32,7 @@
 ; (require 'mercurial)
 ; (require 'ahg)
 
-(ido-mode t)
+(ivy-mode t)
 (font-lock-mode)
 
 (custom-set-variables
@@ -38,7 +42,7 @@
  ;; If there is more than one, they won't work right.
  '(Linum-format "%7i ")
  '(ansi-term-color-vector
-   [unspecified "#110F13" "#b13120" "#719f34" "#ceae3e" "#7c9fc9" "#7868b5" "#009090" "#F4EAD5"])
+   [unspecified "#110F13" "#b13120" "#719f34" "#ceae3e" "#7c9fc9" "#7868b5" "#009090" "#F4EAD5"] t)
  '(bell-volume 0)
  '(blink-cursor-mode nil)
  '(blink-matching-paren t)
@@ -61,12 +65,15 @@
  '(main-line-separator-style 'chamfer)
  '(nyan-wavy-trail t)
  '(package-selected-packages
-   '(latex-pretty-symbols auctex zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
+   '(org org-download org-notebook org-pomodoro auctex auctex-latexmk company-bibtex company-reftex magit-todos magithub sphinx-doc projectile projectile-codesearch projectile-speedbar forge magit eldoro ereader ivy-bibtex timesheet twittering-mode lua-mode string-inflection company-auctex company-quickhelp company-math elpy opencl-mode auto-virtualenvwrapper ein langtool latex-pretty-symbols latex-preview-pane prolog py-autopep8 py-isort py-smart-operator python-docstring python-pep8 virtualenvwrapper sml-mode zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(standard-indent 4)
  '(truncate-lines t)
  '(truncate-partial-width-windows t))
+
+;; initialize packages
+(package-initialize)
 
 ;; Make Emacs split horizontally by default (i.e when doing grep/completion/C-h b)
 (setq split-height-threshold nil)
@@ -82,11 +89,6 @@
 (setq initial-scratch-message ";; welcome, h4x0r.
 
 ")
-
-;; Set up ELPA repos
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 ;; load theme
 (load-theme 'zenburn t)
@@ -107,11 +109,21 @@
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
 
-;; Load keys the last, in order to override bad key bindings
-(require 'keys)
-
 ;; Kill fucking annoying eldoc mode which jumps to definition when I don't want it
 (global-eldoc-mode -1)
+
+;; Make symbols pretty in LaTeX
+(require 'latex-pretty-symbols)
+
+;; Add compilation with latexmk to AucTeX
+(require 'auctex-latexmk)
+(auctex-latexmk-setup)
+
+;; Add compilation with make to AucTeX
+(eval-after-load "tex" '(add-to-list 'TeX-command-list '("Make" "make" TeX-run-compile nil t)))
+
+;; Load keys the last, in order to override bad key bindings
+(require 'keys)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

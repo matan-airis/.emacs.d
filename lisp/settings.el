@@ -29,9 +29,7 @@
 
 (setq grep-find-history '("find . -type f -print0 | xargs -0 -e grep -n "))
 (setq lazy-highlight-initial-delay '0)
-(setq show-paren-delay '0)
 
-(show-paren-mode t)
 (line-number-mode t)
 (column-number-mode t)
 
@@ -64,26 +62,62 @@
 ;; Set the C-mode's tab to 4 spaces.
 (setq c-basic-offset 4)
 
-;; Show the current function in the mode line.
-(which-function-mode 1)
-
 ;; When in text mode, proper line size should be 80.
 (setq-default fill-column 80)
 
-(defcustom LaTeX-indent-level-item-continuation 4
-  "*Indentation of continuation lines for items in itemize-like
-environments."
-  :group 'LaTeX-indentation
-  :type 'integer)
-
+;; Indent enumerate, itemize properly.
 (eval-after-load "latex"
-  '(setq LaTeX-indent-environment-list
-         (nconc '(("itemize" LaTeX-indent-item)
-                  ("enumerate" LaTeX-indent-item)
-                  ("description" LaTeX-indent-item))
-                LaTeX-indent-environment-list)))
+  '(add-to-list 'LaTeX-indent-environment-list
+                '("itemize" LaTeX-indent-item)))
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-indent-environment-list
+                '("enumerate" LaTeX-indent-item)))
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-indent-environment-list
+                '("description" LaTeX-indent-item)))
 
 (setq LaTeX-indent-level 2)
 (setq LaTeX-indent-level-item-continuation 8)
+
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-verbatim-environments "inline"))
+
+(eval-after-load "latex"
+  '(add-to-list 'LaTeX-verbatim-environments "thapl"))
+
+(setq bibtex-text-indentation 2)
+(setq bibtex-contline-indentation 4)
+(setq bibtex-entry-offset 0)
+(setq bibtex-align-at-equal-sign nil)
+(setq bibtex-entry-format '(numerical-fields page-dashes
+last-comma delimiters unify-case))
+;; Do AucTeX things
+
+(setq-default TeX-auto-save t)
+(setq-default TeX-parse-self t)
+(setq-default TeX-master nil)
+(setq-default TeX-engine 'xetex)
+(setq-default TeX-PDF-mode t)
+
+;; UTF-8 forever
+(prefer-coding-system 'utf-8)
+
+;; Python
+(elpy-enable)
+(setq elpy-rpc-python-command "python3")
+
+(eval-after-load "elpy"
+  '(company-quickhelp-mode)
+  )
+
+;; Look for a .venv file
+(defun pyvenv-autoload ()
+  (require 'projectile)
+  (let* ((pdir (projectile-project-root)) (pfile (concat pdir ".venv")))
+    (if (file-exists-p pfile)
+        (pyvenv-activate (with-temp-buffer
+                         (insert-file-contents pfile)
+                         (nth 0 (split-string (buffer-string))))))))
+(add-hook 'python-mode-hook 'pyvenv-autoload)
 
 (provide 'settings)

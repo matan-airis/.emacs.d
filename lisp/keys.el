@@ -4,6 +4,7 @@
 
 (require 'user-macros)
 (require 'custom-functions)
+(require 'string-inflection)
 
 (global-set-key [pause] 'kill-this-buffer)
 (global-set-key [(control tab)] 'other-window)
@@ -11,9 +12,9 @@
 (global-set-key [(control \`)] 'switch-to-other-buffer)
 (global-set-key [(control shift iso-lefttab)] (lambda () (interactive) (other-window -1)))
 (global-set-key [(control z)] 'undo)
-(global-set-key [(control b)] 'ido-switch-buffer)
-(global-set-key [(control f)] 'ido-find-file)
-(global-set-key [(control o)] 'ido-switch-buffer-other-window)
+(global-set-key [(control b)] 'counsel-switch-buffer)
+(global-set-key [(control f)] 'counsel-find-file)
+(global-set-key [(control o)] 'counsel-switch-buffer-other-window)
 (global-set-key [f2] 'new-shell)
 (global-set-key [(control f2)] 'shell)
 (global-set-key [f10] 'call-last-kbd-macro)
@@ -35,16 +36,6 @@
 (global-set-key (kbd "C-~") 'switch-windows)
 (global-set-key [(control f6)] 'switch-windows)
 
-;; C-a is normally C-1, so here we override it
-(global-set-key (kbd "C-a") 'beginning-of-line-nomark)
-
-;; sexp switching/marks
-(global-set-key [(meta left)] 'backward-sexp)
-(global-set-key [(meta right)] 'forward-sexp)
-(global-set-key [(meta shift left)] 'backward-sexp-mark)
-(global-set-key [(meta shift right)] 'forward-sexp-mark)
-(global-set-key [(meta backspace)] 'backward-kill-word)    ;; Don't deleting the entire sexp; too harmful...
-
 ;; More convenient mark bindings (we override C-SPC later on)
 (global-set-key (kbd "C-c m") 'set-mark-command)
 (global-set-key (kbd "C-c C-m") 'set-mark-command)
@@ -54,11 +45,12 @@
 (global-set-key (kbd "C-x C-<up>") 'pop-to-mark-command)
 
 
-(global-set-key [(control meta left)] 'next-buffer)
-(global-set-key [(control meta right)] 'previous-buffer)
 (global-set-key [(f1)] 'man)
 
-(global-set-key (kbd "C-SPC") 'dabbrev-expand)
+; Use M-/ for company in various things. It's better then dabbrev.
+(eval-after-load "elpy"
+  '(define-key elpy-mode-map (kbd "M-/") 'elpy-company-backend))
+
 
 (global-set-key "\M-g" 'goto-line)
 (global-set-key [(control meta b)] 'toggle-truncate-lines)
@@ -89,29 +81,18 @@
    [up end return ?i ?m ?p ?o ?r ?t ?  ?p ?d ?b ?\; ?  ?p ?d ?b ?. ?s ?e ?t ?_ ?t ?r ?a ?c ?e ?\( ?\) down])
 
 ;; Undo the idiotic Python C-backspace, this will be set back to default
-(eval-after-load "python-mode"
-  '(progn
-     (define-key py-mode-map [(control backspace)] nil)
-     (define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
-     ))
+;(eval-after-load "python-mode"
+;  '(progn
+;     (define-key py-mode-map [(control backspace)] nil)
+;     (define-key py-mode-map (kbd "C-c C-b") 'python-breakpoint)
+;     (define-key py-mode-map (kbd "C-c C-u") 'string-inflection-python-style-cycle)
+;     ))
 
-
-(defun scroll-up-one-line()
-  (interactive)
-  (scroll-up 1))
-
-(defun scroll-down-one-line()
-  (interactive)
-  (scroll-down 1))
-
-;; XXX overriding default emacs binding?
-(global-set-key [(control meta up)] 'scroll-down-one-line)
-(global-set-key [(control meta down)] 'scroll-up-one-line)
 
 (global-set-key (kbd "C-c C-q") 'prettify)
 
 ; Camelize
-(global-set-key (kbd "C-C <up>") 'camelize-var)
+(global-set-key (kbd "C-c C-u") 'string-inflection-all-cycle)
 
 ; C-Enter goes to file
 (global-set-key (kbd "C-<return>") 'find-file-at-point)
