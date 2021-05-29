@@ -72,10 +72,22 @@
      (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
      (define-key c-mode-base-map [(shift return)] 'newline)
      ;; C-Scope keys
-     (define-key c-mode-base-map (kbd "C-c g") 'cscope-find-global-definition)
-     (define-key c-mode-base-map (kbd "C-c x") 'cscope-find-functions-calling-this-function)
      (define-key c-mode-base-map (kbd "C-c h") 'c-insert-header-guard)
      ))
+
+;; ggtags
+
+(eval-after-load "ggtags-mode"
+  '(progn
+     (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+     (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+     (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+     (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+     (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+     (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+     (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+     ))
+
 
 (fset 'python-breakpoint
    [up end return ?i ?m ?p ?o ?r ?t ?  ?p ?d ?b ?\; ?  ?p ?d ?b ?. ?s ?e ?t ?_ ?t ?r ?a ?c ?e ?\( ?\) down])

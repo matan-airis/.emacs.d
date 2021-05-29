@@ -120,4 +120,37 @@ last-comma delimiters unify-case))
                          (nth 0 (split-string (buffer-string))))))))
 (add-hook 'python-mode-hook 'pyvenv-autoload)
 
+;; React/Node.js settings
+
+(add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+
+
+(require 'flycheck)
+(require 'emmet-mode)
+
+(defun web-mode-init-hook ()
+  (setq web-mode-markup-indent-offset 4)
+  (emmet-mode))
+
+(setq-default flycheck-disabled-checkers
+              (append flycheck-disabled-checkers
+                      '(javascript-jshint json-jsonlist)))
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+(add-hook 'web-mode-hook  'web-mode-init-hook)
+
+(add-hook 'flycheck-mode-hook 'add-node-modules-path)
+
+(defun web-mode-init-prettier-hook ()
+  (add-node-modules-path)
+  (prettier-js-mode))
+
+(add-hook 'web-mode-hook  'web-mode-init-prettier-hook)
+
+(require 'company-lsp)
+(require 'lsp-mode)
+(add-to-list 'company-lsp-filter-candidates '(digestif . nil))
+(add-hook 'LaTeX-mode-hook #'lsp)
+
 (provide 'settings)
