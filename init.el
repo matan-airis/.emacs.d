@@ -24,16 +24,6 @@
 
 (require 'settings)
 (require 'quick-yes)
-; (require 'internet-search)
-
-;; Mercurial mode files. We have them in our repository, but:
-;;   - mercurial.el is distributed with Mercurial.
-;;   - ahg.el is from https://bitbucket.org/agriggio/ahg/
-; (require 'mercurial)
-; (require 'ahg)
-
-(ivy-mode t)
-(font-lock-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -63,9 +53,9 @@
  '(main-line-color2 "#09150F")
  '(main-line-separator-style 'chamfer)
  '(nyan-wavy-trail t)
- '(org-agenda-files '("~/org/agenda/tasks.org"))
+ '(org-agenda-files '("~/org/agenda/tasks.org") t)
  '(package-selected-packages
-   '(ggtags ivy bison-mode kotlin-mode pdf-tools company-lsp cargo flycheck-rust flymake-rust racer rust-mode prettier-js flycheck flycheck-flow add-node-modules-path web-mode org org-download org-notebook org-pomodoro auctex auctex-latexmk company-bibtex company-reftex magit-todos magithub sphinx-doc projectile projectile-codesearch projectile-speedbar forge magit eldoro ereader ivy-bibtex timesheet twittering-mode lua-mode string-inflection company-auctex company-quickhelp company-math elpy opencl-mode auto-virtualenvwrapper ein langtool latex-pretty-symbols latex-preview-pane prolog py-autopep8 py-isort py-smart-operator python-docstring python-pep8 virtualenvwrapper sml-mode zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
+   '(dynamic-graphs graphviz-dot-mode nyan-mode diminish powerline ggtags ivy bison-mode kotlin-mode pdf-tools company-lsp cargo flycheck-rust flymake-rust racer rust-mode prettier-js flycheck flycheck-flow add-node-modules-path web-mode org org-download org-notebook org-pomodoro auctex auctex-latexmk company-bibtex company-reftex magit-todos magithub sphinx-doc projectile projectile-codesearch projectile-speedbar forge magit eldoro ereader ivy-bibtex timesheet twittering-mode lua-mode string-inflection company-auctex company-quickhelp company-math elpy opencl-mode auto-virtualenvwrapper ein langtool latex-pretty-symbols latex-preview-pane prolog py-autopep8 py-isort py-smart-operator python-docstring python-pep8 virtualenvwrapper sml-mode zenburn-theme tuareg rainbow-mode python-mode merlin latex-unicode-math-mode latex-math-preview latex-extra language-detection))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(standard-indent 4)
@@ -93,49 +83,6 @@
 ;; load theme
 (load-theme 'zenburn t)
 (enable-theme 'zenburn)
-
-;; disable tool bar
-(tool-bar-mode -1)
-
-;; activate nyan-mode (nyan cat location indicator in the modeline)
-(require 'nyan-mode)
-(nyan-mode t)
-(nyan-start-animation)
-
-;; activate rainbow mode (look for colors and show them nicely)
-(rainbow-mode)
-
-; Mark columns that go past 80
-(setq whitespace-style '(face empty tabs lines-tail trailing))
-(global-whitespace-mode t)
-
-;; Kill fucking annoying eldoc mode which jumps to definition when I don't want it
-(global-eldoc-mode -1)
-
-;; Make symbols pretty in LaTeX
-(require 'latex-pretty-symbols)
-
-;; Add compilation with latexmk to AucTeX
-(require 'auctex-latexmk)
-(auctex-latexmk-setup)
-
-;; Syntax highlight Cap'n Proto
-(require 'capnp-mode)
-
-;; Add compilation with make to AucTeX
-(eval-after-load "tex" '(add-to-list 'TeX-command-list '("Make" "make" TeX-run-compile nil t)))
-
-;; Org-mode stuff
-(setq org-agenda-files '("~/org/agenda"))
-(setq org-agenda-start-on-weekday 0)
-(setq org-columns-default-format "%60ITEM(Task) %8Effort(Estim){:} %40DEADLINE(Deadline) %40SCHEDULED(Schedule)")
-
-;; Load ggtags
-(require 'ggtags)
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-              (ggtags-mode 1))))
 
 ;; Load keys the last, in order to override bad key bindings
 (require 'keys)

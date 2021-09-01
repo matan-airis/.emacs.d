@@ -91,13 +91,45 @@
 (setq bibtex-align-at-equal-sign nil)
 (setq bibtex-entry-format '(numerical-fields page-dashes
 last-comma delimiters unify-case))
+
+(add-hook 'plain-TeX-mode-hook
+      (lambda () (set (make-local-variable 'TeX-electric-math)
+              (cons "$" "$"))))
+(add-hook 'LaTeX-mode-hook
+      (lambda () (set (make-local-variable 'TeX-electric-math)
+              (cons "\\(" "\\)"))))
+
 ;; Do AucTeX things
 
 (setq-default TeX-auto-save t)
 (setq-default TeX-parse-self t)
 (setq-default TeX-master nil)
-(setq-default TeX-engine 'xetex)
 (setq-default TeX-PDF-mode t)
+(setq-default TeX-engine 'xetex)
+(setq-default TeX-source-correlate-mode t)
+(setq-default TeX-view-program-selection (quote ((engine-omega "dvips and gv") (output-dvi "xdvi") (output-pdf "Okular") (output-html "xdg-open"))))
+
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+(add-hook 'before-save-hook 'delete-trailing-whitespace nil t)
+
+(defun my-LaTeX-mode-setup ()
+  (font-latex-add-keywords '(("autoref" "*{") ("Autoref" "{") ("nameref" "*{"))
+                         'reference))
+(add-hook 'LaTeX-mode-hook #'my-LaTeX-mode-setup)
+
+;; Add compilation with make to AucTeX
+(eval-after-load "tex" '(add-to-list 'TeX-command-list '("Make" "make" TeX-run-compile nil t)))
+
+;; Make symbols pretty in LaTeX
+(require 'latex-pretty-symbols)
+
+;; Add compilation with latexmk to AucTeX
+(require 'auctex-latexmk)
+(auctex-latexmk-setup)
 
 ;; UTF-8 forever
 (prefer-coding-system 'utf-8)
@@ -125,9 +157,7 @@ last-comma delimiters unify-case))
 (add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
 (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 
-
 (require 'flycheck)
-(require 'emmet-mode)
 
 (defun web-mode-init-hook ()
   (setq web-mode-markup-indent-offset 4)
@@ -152,5 +182,60 @@ last-comma delimiters unify-case))
 (require 'lsp-mode)
 (add-to-list 'company-lsp-filter-candidates '(digestif . nil))
 (add-hook 'LaTeX-mode-hook #'lsp)
+
+;; disable tool bar
+(tool-bar-mode -1)
+
+;; activate nyan-mode (nyan cat location indicator in the modeline)
+(require 'nyan-mode)
+(nyan-mode t)
+(nyan-start-animation)
+
+;; activate rainbow mode (look for colors and show them nicely)
+(rainbow-mode)
+
+; Mark columns that go past 80
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+(global-whitespace-mode t)
+
+;; Kill fucking annoying eldoc mode which jumps to definition when I don't want it
+(global-eldoc-mode -1)
+
+
+;; Syntax highlight Cap'n Proto
+(require 'capnp-mode)
+
+
+;; Org-mode stuff
+(setq org-agenda-files '("~/org/agenda"))
+(setq org-agenda-start-on-weekday 0)
+(setq org-columns-default-format "%60ITEM(Task) %8Effort(Estim){:} %40DEADLINE(Deadline) %40SCHEDULED(Schedule)")
+
+;; Load ggtags
+(require 'ggtags)
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+              (ggtags-mode 1))))
+
+;; Ivy
+(ivy-mode t)
+
+;; Always font lock
+(font-lock-mode)
+
+;; powerline
+(require 'powerline)
+(powerline-default-theme)
+
+;; Remove stuff I always use from the modeline
+(require 'diminish)
+(diminish 'lsp-mode)
+(diminish 'rainbow-mode)
+(diminish 'ivy-mode)
+(diminish 'global-whitespace-mode)
+(diminish 'auto-revert-mode)
+(diminish 'auto-fill-function)
+(diminish 'visual-line-mode)
 
 (provide 'settings)
