@@ -178,9 +178,10 @@ last-comma delimiters unify-case))
 
 (add-hook 'web-mode-hook  'web-mode-init-prettier-hook)
 
-(require 'company-lsp)
+
+(require 'company)
+(setq lsp-completion-provider :capf)
 (require 'lsp-mode)
-(add-to-list 'company-lsp-filter-candidates '(digestif . nil))
 (add-hook 'LaTeX-mode-hook #'lsp)
 
 ;; disable tool bar
