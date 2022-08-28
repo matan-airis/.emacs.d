@@ -4,7 +4,6 @@
 
 (require 'user-macros)
 (require 'custom-functions)
-(require 'string-inflection)
 
 (global-set-key [pause] 'kill-this-buffer)
 (global-set-key [(control tab)] 'other-window)
@@ -12,9 +11,6 @@
 (global-set-key [(control \`)] 'switch-to-other-buffer)
 (global-set-key [(control shift iso-lefttab)] (lambda () (interactive) (other-window -1)))
 (global-set-key [(control z)] 'undo)
-(global-set-key [(control b)] 'counsel-switch-buffer)
-(global-set-key [(control f)] 'counsel-find-file)
-(global-set-key [(control o)] 'counsel-switch-buffer-other-window)
 (global-set-key [f2] 'new-shell)
 (global-set-key [(control f2)] 'shell)
 (global-set-key [f10] 'call-last-kbd-macro)
@@ -31,10 +27,6 @@
 (global-set-key (kbd "C-2") 'split-horizontally-change-other-window)
 (global-set-key (kbd "C-3") 'split-vertically-change-other-window)
 (global-set-key (kbd "C-0") 'delete-window)
-; Let's see which key binding I'll use most...
-(global-set-key (kbd "C-M-`") 'switch-windows)
-(global-set-key (kbd "C-~") 'switch-windows)
-(global-set-key [(control f6)] 'switch-windows)
 
 ;; More convenient mark bindings (we override C-SPC later on)
 (global-set-key (kbd "C-c m") 'set-mark-command)
@@ -47,17 +39,21 @@
 
 (global-set-key [(f1)] 'man)
 
-; Use M-/ for company in various things. It's better then dabbrev.
+;; Use M-/ for company in various things. It's better then dabbrev.
 (eval-after-load "elpy"
   '(define-key elpy-mode-map (kbd "M-/") 'elpy-company-backend))
+(global-set-key (kbd "M-/") 'company-complete)
+;; s-TAB cycles through completions
+(global-set-key (kbd "s-TAB") 'company-complete-common-or-cycle)
 
+(global-set-key (kbd "C-c y") 'company-yasnippet)
 
 (global-set-key "\M-g" 'goto-line)
+(global-set-key (kbd "s-g") 'goto-line)
 (global-set-key [(control meta b)] 'toggle-truncate-lines)
 
 (global-set-key "\M-\\" 'shell-command-on-region-inplace)
 
-(global-set-key (kbd "C-c s") 'search-in-internet)
 (global-set-key (kbd "C-c b") 'browse-url)
 
 (global-set-key (kbd "C-c r") 'revert-buffer)
@@ -80,6 +76,7 @@
 (eval-after-load "ggtags-mode"
   '(progn
      (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+
      (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
      (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
      (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
@@ -102,11 +99,5 @@
 
 
 (global-set-key (kbd "C-c C-q") 'prettify)
-
-; Camelize
-(global-set-key (kbd "C-c C-u") 'string-inflection-all-cycle)
-
-; C-Enter goes to file
-(global-set-key (kbd "C-<return>") 'find-file-at-point)
 
 (provide 'keys)
