@@ -1,7 +1,6 @@
 ;;
 ;; Packages, colors, and other settings
 ;;
-
 (require 'custom-functions)
 
 (defun switch-to-other-buffer ()
@@ -36,7 +35,6 @@
 
 ;; Always font lock
 (font-lock-mode)
-
 
 ;; Set C-x c to quit, not C-x C-c
 (global-set-key [(control x) (control c)]
@@ -247,8 +245,10 @@ files in Fundamental mode."
   :ensure t
   :diminish company-mode
   :init
-  (setq company-tooltip-align-annotations t)
-  (setq company-show-quick-access t)
+  (setq company-tooltip-align-annotations t
+        company-show-quick-access t
+        company-minimum-prefix-length 1
+        company-idle-delay 0.0)
   :config (global-company-mode))
 
 (use-package company-quickhelp
@@ -360,13 +360,19 @@ files in Fundamental mode."
   :hook prog-mode
   :diminish rainbow-mode)
 
-; Mark columns that go past 80
+;; Whitespace mode: Mark columns that go past 80
+;; But actually, don't enable in magit buffers (consider giving up on global?)
+(defun prevent-whitespace-mode-for-magit ()
+  (not (derived-mode-p 'magit-mode)))
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
+(add-function :before-while whitespace-enable-predicate 'prevent-whitespace-mode-for-magit)
+
+;; Prefer spaces to tabs
+(setq-default indent-tabs-mode nil)
 
 ;; Kill fucking annoying eldoc mode which jumps to definition when I don't want it
 (global-eldoc-mode -1)
-
 
 ;; Syntax highlight Cap'n Proto
 (use-package capnp-mode
