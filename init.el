@@ -1,6 +1,7 @@
 ;;
 ;; Initial Emacs load file
 ;;
+;(byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 
 ;; Set up ELPA repos
 (setq load-prefer-newer t)
@@ -101,7 +102,7 @@
  '(nyan-wavy-trail t)
  '(org-agenda-files '("~/org/agenda/tasks.org") t)
  '(package-selected-packages
-   '(go-mode vue-mode google-c-style clang-format+ company-coq proof-general lua-mode auto-compile use-package all-the-icons-ivy-rich amx auctex auctex-latexmk capnp-mode company company-quickhelp counsel-projectile diminish elpy find-file-in-project flycheck forge ivy ivy-rich latex-pretty-symbols lsp-mode magit nyan-mode powerline projectile rainbow-mode string-inflection tide web-mode zenburn-theme counsel cmake-mode))
+   '(company-tabnine go-mode vue-mode google-c-style clang-format+ company-coq proof-general lua-mode auto-compile use-package all-the-icons-ivy-rich amx auctex auctex-latexmk capnp-mode company company-quickhelp counsel-projectile diminish elpy find-file-in-project flycheck forge ivy ivy-rich latex-pretty-symbols lsp-mode magit nyan-mode powerline projectile rainbow-mode string-inflection tide web-mode zenburn-theme counsel cmake-mode))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(proof-three-window-mode-policy 'hybrid)

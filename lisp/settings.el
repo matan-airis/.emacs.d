@@ -9,8 +9,8 @@
   (switch-to-buffer nil)
 )
 
-;; Run "xlsfonts | grep courier-medium-r" to view available fonts
-;; For this font, you should install on your machine the the package xfonts-75dpi.
+;; Run "xlsfonts | grep courier-medium-r" to view available fonts For this font,
+;; you should install on your machine the the package xfonts-75dpi.
 (set-frame-font "DejaVu Sans Mono-13")
 
 ;; Set the default font for new frames. This is helpful when doing
@@ -33,12 +33,15 @@
 ;; Some visual things
 (line-number-mode t)
 (column-number-mode t)
+
 ;; Always font lock
 (font-lock-mode)
 
 
 ;; Set C-x c to quit, not C-x C-c
-(global-set-key [(control x) (control c)] (defun dont-kill-emacs() (interactive) (message "Use C-x c to leave emacs")))
+(global-set-key [(control x) (control c)]
+                (defun dont-kill-emacs() (interactive)
+                       (message "Use C-x c to leave emacs")))
 (global-set-key [(control x) c] 'save-buffers-kill-terminal)
 (global-set-key "\C-xc" 'save-buffers-kill-terminal)
 
@@ -54,9 +57,11 @@
 (eval-after-load "diff-mode"
   '(update-diff-colors))
 
-;; Don't ask before killing a buffer with a running process.
-;; This list holds hooks to run before killing a buffer, and it has originally contained only process-kill-buffer-query-function.
-;; In order to restore the default, remove this line or replace it with: (setq kill-buffer-query-functions 'process-kill-buffer-query-function)
+;; Don't ask before killing a buffer with a running process.  This list holds
+;; hooks to run before killing a buffer, and it has originally contained only
+;; process-kill-buffer-query-function.  In order to restore the default, remove
+;; this line or replace it with: (setq kill-buffer-query-functions
+;; 'process-kill-buffer-query-function)
 (setq kill-buffer-query-functions nil)
 
 ;; Set firefox as the default browser.
@@ -65,6 +70,10 @@
 
 ;; When in text mode, proper line size should be 80.
 (setq-default fill-column 80)
+
+;; Look for passwords in .authinfo.gpg
+(setq auth-sources
+      '((:source "~/.authinfo.gpg")))
 
 ;; LaTeX settings
 (use-package latex
@@ -112,7 +121,10 @@
                 TeX-PDF-mode t
                 TeX-engine 'xetex
                 TeX-source-correlate-mode t
-                TeX-view-program-selection (quote ((engine-omega "dvips and gv") (output-dvi "xdvi") (output-pdf "Okular") (output-html "xdg-open"))))
+                TeX-view-program-selection (quote ((engine-omega "dvips and gv")
+                                                   (output-dvi "xdvi")
+                                                   (output-pdf "Okular")
+                                                   (output-html "xdg-open"))))
   )
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)
@@ -236,6 +248,7 @@ files in Fundamental mode."
   :diminish company-mode
   :init
   (setq company-tooltip-align-annotations t)
+  (setq company-show-quick-access t)
   :config (global-company-mode))
 
 (use-package company-quickhelp
@@ -243,6 +256,13 @@ files in Fundamental mode."
   :after company
   :config
   (company-quickhelp-mode))
+
+;; AI autocompleters
+(use-package company-tabnine
+  :ensure t
+  :after company
+  :config
+  (add-to-list 'company-backends #'company-tabnine))
 
 ;; TypeScript setup
 (use-package flycheck
@@ -357,8 +377,8 @@ files in Fundamental mode."
 (use-package go-mode
   :ensure t
   :bind (
-         ;; If you want to switch existing go-mode bindings to use lsp-mode/gopls instead
-         ;; uncomment the following lines
+         ;; If you want to switch existing go-mode bindings to use
+         ;; lsp-mode/gopls instead uncomment the following lines
          ;; ("C-c C-j" . lsp-find-definition)
          ;; ("C-c C-d" . lsp-describe-thing-at-point)
          )
@@ -375,7 +395,8 @@ files in Fundamental mode."
 ;; Org-mode stuff
 (setq org-agenda-files '("~/org/agenda"))
 (setq org-agenda-start-on-weekday 0)
-(setq org-columns-default-format "%60ITEM(Task) %8Effort(Estim){:} %40DEADLINE(Deadline) %40SCHEDULED(Schedule)")
+(setq org-columns-default-format
+      "%60ITEM(Task) %8Effort(Estim){:} %40DEADLINE(Deadline) %40SCHEDULED(Schedule)")
 
 ;; Ivy and amx
 (use-package amx
@@ -461,7 +482,9 @@ files in Fundamental mode."
   :mode ("\\.v'" . coq-mode)
   :ensure t
   :init
-  (dolist (var (car (read-from-string (shell-command-to-string "~/.local/bin/opam config env --sexp"))))
+  (dolist (var (car (read-from-string
+                     (shell-command-to-string
+                      "~/.local/bin/opam config env --sexp"))))
     (setenv (car var) (cadr var)))
   (setq coq-prog-name "/home/mip/.opam/default/bin/coqtop"))
 
