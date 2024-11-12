@@ -88,7 +88,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(Linum-format "%7i ")
  '(bell-volume 0)
  '(blink-cursor-mode nil)
  '(blink-matching-paren t)
@@ -99,10 +98,12 @@
  '(linum-format " %6d ")
  '(load-home-init-file t t)
  '(main-line-separator-style 'chamfer)
- '(nyan-wavy-trail t)
  '(org-agenda-files '("~/org/agenda/tasks.org") t)
  '(package-selected-packages
-   '(company-tabnine go-mode vue-mode google-c-style clang-format+ company-coq proof-general lua-mode auto-compile use-package all-the-icons-ivy-rich amx auctex auctex-latexmk capnp-mode company company-quickhelp counsel-projectile diminish elpy find-file-in-project flycheck forge ivy ivy-rich latex-pretty-symbols lsp-mode magit nyan-mode powerline projectile rainbow-mode string-inflection tide web-mode zenburn-theme counsel cmake-mode))
+   '(all-the-icons-ivy-rich amx auctex-latexmk auto-compile blackout capnp-mode clang-format+ company-quickhelp
+                            counsel-projectile find-file-in-project forge format-all google-c-style
+                            latex-pretty-symbols lua-mode powerline protobuf-ts-mode python-black pyvenv rainbow-mode
+                            sqlite3 ssh-config-mode string-inflection tide vue-mode web-mode zenburn-theme))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(proof-three-window-mode-policy 'hybrid)

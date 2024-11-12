@@ -8,14 +8,17 @@
   (switch-to-buffer nil)
 )
 
+;; UTF-8 forever
+(prefer-coding-system 'utf-8)
+
 ;; Run "xlsfonts | grep courier-medium-r" to view available fonts For this font,
 ;; you should install on your machine the the package xfonts-75dpi.
-(set-frame-font "DejaVu Sans Mono-13")
+(set-frame-font "Fira Code-14")
 
 ;; Set the default font for new frames. This is helpful when doing
 ;; new-frame[-on-display] or when running emacsclient.
 (add-to-list 'default-frame-alist
-             '(font . "DejaVu Sans Mono-13"))
+             '(font . "Fira Code-14"))
 
 ;; Shell mode
 (setq ansi-color-names-vector ; better contrast colors
@@ -35,6 +38,9 @@
 
 ;; Always font lock
 (font-lock-mode)
+
+;; auto-revert all the files
+(global-auto-revert-mode)
 
 ;; Set C-x c to quit, not C-x C-c
 (global-set-key [(control x) (control c)]
@@ -72,6 +78,62 @@
 ;; Look for passwords in .authinfo.gpg
 (setq auth-sources
       '((:source "~/.authinfo.gpg")))
+
+;; ask for gpg passwords in the minibuffer
+(setq epa-pinentry-mode 'loopback)
+
+;; use tree-sitter modes
+(setq major-mode-remap-alist
+ '((yaml-mode . yaml-ts-mode)
+   (bash-mode . bash-ts-mode)
+   (js2-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (json-mode . json-ts-mode)
+   (css-mode . css-ts-mode)
+   (lua-mode . lua-ts-mode)
+   (python-mode . python-ts-mode)))
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-activate "~/.venv/"))
+
+;; Eglot LSP
+(use-package eglot
+  :ensure t
+  :defer t
+  :hook ((python-ts-mode . eglot-ensure)))
+
+;; Python Black formatter
+(use-package python-black
+  :ensure t
+  :demand t
+  :hook (python-ts-mode . python-black-on-save-mode-enable-dwim)
+  :config
+  (setq-default python-black-extra-args '("--line-length" "120")))
+
+;; format-all-the-code
+(use-package format-all
+  :ensure t
+  :commands format-all-mode
+  :hook (prog-mode . format-all-mode)
+  :blackout format-all-mode
+  :config
+  (setq-default format-all-formatters
+                '("Python"
+                  (black "--line-length" "120")
+                  (isort "--line-length=120" "--profile=black"))))
+
+;; Major mode for Docker files
+(use-package dockerfile-ts-mode
+  :ensure t
+  :mode (("\\[dD]ockerfile\\'" . dockerfile-ts-mode)
+         ("\\.dockerignore\\'" . dockerfile-ts-mode)))
+
+;; Major mode for proto files
+(use-package protobuf-ts-mode
+  :ensure t
+  :mode (("\\.proto\\'" . protobuf-ts-mode)))
 
 ;; LaTeX settings
 (use-package latex
@@ -145,21 +207,6 @@
   (auctex-latexmk-setup)
   (advice-remove 'require #'my-auctex-latexmk-advice)
   )
-
-;; UTF-8 forever
-(prefer-coding-system 'utf-8)
-
-;; Python
-(use-package elpy
-  :ensure t
-  :defer t
-  :after (flycheck company)
-  :hook (elpy-mode-hook . flycheck-mode)
-  :init
-  (advice-add 'python-mode :before 'elpy-enable)
-  (setq elpy-rpc-python-command "python3")
-  :config
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
 
 ;; projectile
 (use-package projectile
@@ -243,13 +290,13 @@ files in Fundamental mode."
 ;; company mode (auto completions)
 (use-package company
   :ensure t
-  :diminish company-mode
   :init
   (setq company-tooltip-align-annotations t
         company-show-quick-access t
         company-minimum-prefix-length 1
         company-idle-delay 0.0)
-  :config (global-company-mode))
+  :config (global-company-mode)
+  :blackout company-mode)
 
 (use-package company-quickhelp
   :ensure t
@@ -257,17 +304,11 @@ files in Fundamental mode."
   :config
   (company-quickhelp-mode))
 
-;; AI autocompleters
-(use-package company-tabnine
-  :ensure t
-  :after company
-  :config
-  (add-to-list 'company-backends #'company-tabnine))
 
 ;; TypeScript setup
 (use-package flycheck
   :ensure t
-  :diminish flycheck-mode
+  :blackout flycheck-mode
   :init
   (setq flycheck-check-syntax-automatically '(save mode-enabled)))
 
@@ -282,7 +323,7 @@ files in Fundamental mode."
 ;; React/Node.js/Vue settings
 (use-package web-mode
   :ensure t
-  :diminish "🌎"
+  :blackout "🌎"
   :mode
   (("\\.phtml\\'" . web-mode)
   ("\\.tpl\\.php\\'" . web-mode)
@@ -310,33 +351,6 @@ files in Fundamental mode."
   :ensure t
   :mode (("\\.vue\\'" . vue-mode)))
 
-;; lsp stuff (mostly latex but not only)
-(use-package lsp-mode
-  :ensure t
-  :diminish lsp-mode
-  :commands lsp lsp-deferred
-  :hook ((lsp-after-open . lsp-enable-imenu)
-         (LaTeX-mode-hook . lsp)
-         (lsp-mode . lsp-enable-which-key-integration)
-         (lsp-after-open . (lambda ()
-                            (setq-local company-minimum-prefix-length 1
-                                  company-idle-delay 0.0) ;; default is 0.2
-                            ))
-
-
-         )
-  :bind (:map lsp-mode-map
-              ("C-c C-t" . lsp-describe-thing-at-point))
-  :config
-  (setq lsp-prefer-flymake nil
-        lsp-auto-guess-root t ; Detect project root
-        lsp-keep-workspace-alive nil ; Auto-kill LSP server
-        lsp-enable-indentation nil
-        lsp-enable-symbol-highlighting nil
-        lsp-enable-on-type-formatting nil
-        lsp-clients-texlab-executable "~/.cargo/bin/texlab"
-        lsp-go-gopls-server-path "~/gopath/bin/gopls"
-        lsp-completion-provider :capf))
 
 ;; Lua configuration
 (use-package lua-mode
@@ -347,26 +361,23 @@ files in Fundamental mode."
     (setq lua-indent-level 4)
     (setq lua-indent-string-contents t))
 
-;; activate nyan-mode (nyan cat location indicator in the modeline)
-(use-package nyan-mode
-  :ensure t
-  :config
-  (nyan-mode t)
-  (nyan-start-animation))
-
 ;; activate rainbow mode (look for colors and show them nicely)
 (use-package rainbow-mode
   :ensure t
   :hook prog-mode
-  :diminish rainbow-mode)
+  :blackout rainbow-mode)
 
-;; Whitespace mode: Mark columns that go past 80
+;; Whitespace mode: Mark columns that go past 120
 ;; But actually, don't enable in magit buffers (consider giving up on global?)
 (defun prevent-whitespace-mode-for-magit ()
   (not (derived-mode-p 'magit-mode)))
-(setq whitespace-style '(face empty tabs lines-tail trailing))
+(setq-default whitespace-style '(face empty tabs lines-tail trailing))
+(setq-default whitespace-line-column 120)
 (global-whitespace-mode t)
 (add-function :before-while whitespace-enable-predicate 'prevent-whitespace-mode-for-magit)
+
+(setq-default fill-column 119)
+
 
 ;; Prefer spaces to tabs
 (setq-default indent-tabs-mode nil)
@@ -378,25 +389,6 @@ files in Fundamental mode."
 (use-package capnp-mode
   :ensure t
   :mode "\\.capnp\\'")
-
-;; Syntax highlighting and stuff for golang
-(use-package go-mode
-  :ensure t
-  :bind (
-         ;; If you want to switch existing go-mode bindings to use
-         ;; lsp-mode/gopls instead uncomment the following lines
-         ;; ("C-c C-j" . lsp-find-definition)
-         ;; ("C-c C-d" . lsp-describe-thing-at-point)
-         )
-  :hook ((go-mode . lsp-deferred)
-         (before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports))
-  :config
-  (setq whitespace-style '(face empty trailing)
-        tab-width 4
-        indent-tabs-mode 1)
-  )
-
 
 ;; Org-mode stuff
 (setq org-agenda-files '("~/org/agenda"))
@@ -413,7 +405,6 @@ files in Fundamental mode."
 (use-package ivy
   :ensure t
   :bind (("C-c u" . ivy-resume))
-  :diminish ivy-mode
   :demand t ; load immediatly
   :config
   (ivy-mode)
@@ -438,7 +429,8 @@ files in Fundamental mode."
    ("b" . backward-char)
    ("f" . forward-char)
    ("v" . ivy-occur-press) ; default f
-   ("RET" . ivy-occur-press)))
+   ("RET" . ivy-occur-press))
+  :blackout ivy-mode)
 
 ;; Better experience with icons for ivy
 ;; https://github.com/seagle0128/all-the-icons-ivy-rich/
@@ -464,13 +456,13 @@ files in Fundamental mode."
 (use-package counsel
   :ensure t
   :after ivy
-  :diminish counsel-mode
   :bind
   ("C-x C-f" . counsel-find-file)
   ("s-g" . counsel-git-grep)
   :config
   (setq counsel-switch-buffer-preview-virtual-buffers nil)
-  (counsel-mode))
+  (counsel-mode)
+  :blackout counsel-mode)
 
 (use-package counsel-projectile
   :ensure t
@@ -484,23 +476,28 @@ files in Fundamental mode."
   (powerline-default-theme))
 
 ;; Coq/iris
-(use-package proof-general
-  :mode ("\\.v'" . coq-mode)
-  :ensure t
-  :init
-  (dolist (var (car (read-from-string
-                     (shell-command-to-string
-                      "~/.local/bin/opam config env --sexp"))))
-    (setenv (car var) (cadr var)))
-  (setq coq-prog-name "/home/mip/.opam/default/bin/coqtop"))
+;(use-package proof-general
+;  :mode ("\\.v'" . coq-mode)
+;  :ensure t
+;  :init
+;  (dolist (var (car (read-from-string
+;                     (shell-command-to-string
+;                      "~/.local/bin/opam config env --sexp"))))
+;    (setenv (car var) (cadr var)))
+;  (setq coq-prog-name "/home/mip/.opam/default/bin/coqtop"))
 
-(use-package company-coq
-  :ensure t
-  :after company proof-general)
+;(use-package company-coq
+;  :ensure t
+;  :after company proof-general)
 
 ;; magit
-(use-package magit
+(use-package sqlite3
   :ensure t)
+
+(use-package magit
+  :ensure t
+  :after sqlite3
+  :bind (("C-x g" . magit-status)))
 
 (use-package forge
   :ensure t
@@ -516,13 +513,18 @@ files in Fundamental mode."
   :bind (:map prog-mode-map
               ("C-c C-u" . string-inflection-all-cycle)))
 
+;; Mode for editing .ssh/config
+(use-package ssh-config-mode
+  :ensure t)
+
 ;; Remove stuff I always use from the modeline
-(use-package diminish
+(use-package blackout
   :ensure t
   :config
-  (diminish 'global-whitespace-mode)
-  (diminish 'auto-revert-mode)
-  (diminish 'auto-fill-function)
-  (diminish 'visual-line-mode))
+  (blackout 'global-whitespace-mode)
+  (blackout 'whitespace-mode)
+  (blackout 'auto-revert-mode)
+  (blackout 'eldoc-mode)
+  (blackout 'company-mode))
 
 (provide 'settings)
