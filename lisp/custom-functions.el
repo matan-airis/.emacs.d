@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Functions that I wrote/found on the internet, and are useful.
 
 (defun shell-command-on-region-inplace (start end command)
