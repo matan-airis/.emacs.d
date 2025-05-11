@@ -9,8 +9,8 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Try: $ gpg --homedir .emacs.d/elpa/gnupg --keyserver keyserver.ubuntu.com --receive-keys F8D0B4E7D2D21191
-(add-to-list 'package-archives
-             '("user42" . "https://download.tuxfamily.org/user42/elpa/packages/") t)
+;; (add-to-list 'package-archives
+;;             '("user42" . "https://download.tuxfamily.org/user42/elpa/packages/") t)
 
 ;; Add the given path to the load-path variable.
 (defun add-to-load-path (path-string)
