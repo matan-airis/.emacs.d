@@ -94,6 +94,10 @@
    (lua-mode . lua-ts-mode)
    (python-mode . python-ts-mode)))
 
+;; interpret "uv run --script" as python
+(add-to-list 'interpreter-mode-alist
+             '("uv" . python-ts-mode))
+
 
 ;; == Packages ==
 
