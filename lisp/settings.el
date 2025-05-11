@@ -86,14 +86,28 @@
 
 ;; use tree-sitter modes
 (setq major-mode-remap-alist
- '((yaml-mode . yaml-ts-mode)
-   (bash-mode . bash-ts-mode)
+ '((bash-mode . bash-ts-mode)
    (js2-mode . js-ts-mode)
    (typescript-mode . typescript-ts-mode)
    (json-mode . json-ts-mode)
    (css-mode . css-ts-mode)
    (lua-mode . lua-ts-mode)
    (python-mode . python-ts-mode)))
+
+
+;; == Packages ==
+
+;; Display stuff should go first so that the emacs window would get the right shape
+
+;; powerline
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
+
+;; toml-ts-mode comes with emacs but we need to load it so it's added to the auto-mode-alist
+(use-package toml-ts-mode)
+(use-package yaml-ts-mode)
 
 (use-package pyvenv
   :ensure t
@@ -360,8 +374,8 @@ files in Fundamental mode."
   :mode "\\.lua$"
   :interpreter "lua"
   :config
-    (setq lua-indent-level 4)
-    (setq lua-indent-string-contents t))
+  (setq lua-indent-level 4)
+  (setq lua-indent-string-contents t))
 
 ;; activate rainbow mode (look for colors and show them nicely)
 (use-package rainbow-mode
@@ -393,10 +407,21 @@ files in Fundamental mode."
   :mode "\\.capnp\\'")
 
 ;; Org-mode stuff
-(setq org-agenda-files '("~/org/agenda"))
-(setq org-agenda-start-on-weekday 0)
-(setq org-columns-default-format
-      "%60ITEM(Task) %8Effort(Estim){:} %40DEADLINE(Deadline) %40SCHEDULED(Schedule)")
+(use-package org
+  :init
+  (setq org-agenda-files '("~/org/agenda")
+        org-agenda-start-on-weekday 0
+        org-columns-default-format
+        "%60ITEM(Task) %8Effort(Estim){:} %40DEADLINE(Deadline) %40SCHEDULED(Schedule)"))
+
+;; org-jira stuff
+(use-package org-jira
+  :after org
+  :ensure t
+  :init
+  (setq jiralib-url "https://airis-labs.atlassian.net"
+        jiralib-update-issue-fields-exclude-list '(components reporter)))
+
 
 ;; Ivy and amx
 (use-package amx
@@ -471,11 +496,6 @@ files in Fundamental mode."
   :after (counsel projectile)
   :hook counsel-mode)
 
-;; powerline
-(use-package powerline
-  :ensure t
-  :config
-  (powerline-default-theme))
 
 ;; Coq/iris
 ;(use-package proof-general

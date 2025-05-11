@@ -96,15 +96,16 @@
  '(frame-brackground-mode 'dark)
  '(global-font-lock-mode t nil (font-lock))
  '(indent-tabs-mode nil)
+ '(jiralib-update-issue-fields-exclude-list :components)
  '(linum-format " %6d ")
  '(load-home-init-file t t)
  '(main-line-separator-style 'chamfer)
- '(org-agenda-files '("~/org/agenda/tasks.org") t)
+ '(org-agenda-files '("~/org/agenda/tasks.org"))
  '(package-selected-packages
    '(all-the-icons-ivy-rich amx auctex-latexmk auto-compile blackout capnp-mode clang-format+ company-quickhelp
-                            counsel-projectile find-file-in-project forge format-all google-c-style
-                            latex-pretty-symbols lua-mode powerline protobuf-ts-mode python-black pyvenv rainbow-mode
-                            sqlite3 ssh-config-mode string-inflection tide vue-mode web-mode zenburn-theme))
+                            counsel-projectile eglot find-file-in-project forge format-all google-c-style
+                            latex-pretty-symbols lua-mode org-jira powerline protobuf-ts-mode python-black pyvenv
+                            rainbow-mode sqlite3 ssh-config-mode string-inflection tide vue-mode web-mode zenburn-theme))
  '(powerline-color1 "#222912")
  '(powerline-color2 "#09150F")
  '(proof-three-window-mode-policy 'hybrid)
